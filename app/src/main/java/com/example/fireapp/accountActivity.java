@@ -63,7 +63,7 @@ public class accountActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Toast.makeText(accountActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
                             mAuth.getCurrentUser();
-                            startActivity(new Intent(accountActivity.this, exampleActivity.class));
+                            startActivity(new Intent(accountActivity.this, Main2Activity.class));
                         }else
                         {
                             Toast.makeText(accountActivity.this, "Sign in failed", Toast.LENGTH_SHORT).show();

@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity {
+
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
            @Override
            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                if(firebaseAuth.getCurrentUser() != null) {
-                   startActivity(new Intent(MainActivity.this,exampleActivity.class));
+                   startActivity(new Intent(MainActivity.this,Main2Activity.class));
                    finish();
                }
            }
