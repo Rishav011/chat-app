@@ -25,12 +25,15 @@ public class accountActivity extends AppCompatActivity {
     private  EditText passwordEditText;
     private EditText cnfPasswordEditText;
     private Button signUpButton;
+    private EditText usernameEditText;
+    private Firebase mRootRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         mAuth = FirebaseAuth.getInstance();
+        usernameEditText = findViewById(R.id.usernameEditText);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         cnfPasswordEditText = findViewById(R.id.cnfPasswordEditText);
@@ -63,6 +66,12 @@ public class accountActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Toast.makeText(accountActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
                             mAuth.getCurrentUser();
+
+                            mRootRef = new Firebase("https://fireapp-49e03.firebaseio.com/User");
+                            String username = usernameEditText.getText().toString();
+                            Firebase childRef=mRootRef.child("Username");
+                            childRef.setValue(username);
+
                             startActivity(new Intent(accountActivity.this, Main2Activity.class));
                         }else
                         {
