@@ -69,8 +69,13 @@ public class accountActivity extends AppCompatActivity {
 
                             mRootRef = new Firebase("https://fireapp-49e03.firebaseio.com/User");
                             String username = usernameEditText.getText().toString();
-                            Firebase childRef=mRootRef.child("Username");
-                            childRef.setValue(username);
+                            if(mAuth.getCurrentUser() != null)
+                            {
+                                mRootRef.child(mAuth.getUid()).child("username").setValue(username);
+                            }
+
+//                            Firebase childRef=mRootRef.child("Username");
+//                            childRef.setValue(username);
 
                             startActivity(new Intent(accountActivity.this, Main2Activity.class));
                         }else
