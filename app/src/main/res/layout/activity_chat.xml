@@ -56,9 +56,9 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="27dp"
             android:layout_toLeftOf="@id/btn_send"
-            android:background="@drawable/input_bg"
+            android:background="#FFF2F1F1"
             android:hint="Type a message..."
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="10dp"/>
 
         <ImageButton
             android:layout_width="40dp"
