@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class accountActivity extends AppCompatActivity {
 
@@ -66,12 +70,20 @@ public class accountActivity extends AppCompatActivity {
                         if(task.isSuccessful()) {
                             Toast.makeText(accountActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
                             mAuth.getCurrentUser();
+                            FirebaseUser mUser = mAuth.getCurrentUser();
+                            String userid = mUser.getUid();
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User").child(userid);
 
                             mRootRef = new Firebase("https://fireapp-49e03.firebaseio.com/User");
                             String username = usernameEditText.getText().toString();
+
                             if(mAuth.getCurrentUser() != null)
                             {
-                                mRootRef.child(mAuth.getUid()).child("username").setValue(username);
+                                HashMap<String,Object> hashMap = new HashMap<>();
+                                hashMap.put("username",username);
+                                hashMap.put("id",userid);
+                                reference.setValue(hashMap);
+                               // mRootRef.child(mAuth.getUid()).child("username").setValue(username);
                             }
 
 //                            Firebase childRef=mRootRef.child("Username");

@@ -48,36 +48,15 @@ public class tab3 extends Fragment {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User");
-        reference.child(firebaseUser.getUid()).child("username").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String s;
-                if(dataSnapshot.exists())
-                {
-                    s = dataSnapshot.getValue(String.class);
-                    Log.i(TAG, "readUsers: " + s );
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-
-                    if(snapshot.exists() && !snapshot.getKey().equals(FirebaseAuth.getInstance().getUid()))
+                    Users users = snapshot.getValue(Users.class);
+                    if(snapshot.exists() && !users.getId().equals(firebaseUser.getUid()))
                     {
-                        Users users = snapshot.getValue(Users.class);
+
                         // if(!users.getId().equals(firebaseUser.getUid())) {
                         Log.i(TAG, "onDataChange: "+ snapshot.getKey());
                         mUsers.add(users);

@@ -44,6 +44,7 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull User_Adapter.ViewHolder holder, final int position) {
+        final Users user = Username.get(position);
         TextView name = holder.mView.findViewById(R.id.username);
            // holder.mView.
         name.setText(Username.get(position).getUsername());
@@ -51,26 +52,9 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference.orderByChild("username").equalTo(Username.get(position).getUsername())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String key = "";
-                                for(DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
-                                    key = childSnapshot.getKey();
-                                }
-
-                                Intent intent = new Intent(context, chatActivity.class);
-
-                                intent.putExtra("userid", key);
-                                context.startActivity(intent);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                Intent intent = new Intent (context,chatActivity.class);
+                intent.putExtra("userid",user.getId());
+                context.startActivity(intent);
             }
         });
 //        name.setText("sdfgh");

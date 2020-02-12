@@ -54,7 +54,7 @@ public class chatActivity extends AppCompatActivity {
         intent=getIntent();
         final String key=intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-
+        reference = FirebaseDatabase.getInstance().getReference("User").child(key);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,11 +70,15 @@ public class chatActivity extends AppCompatActivity {
         });
 
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-        reference= FirebaseDatabase.getInstance().getReference("User").child(key);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Users user = dataSnapshot.getValue(Users.class);
+//                try {
+//                  //  Toast.makeText(chatActivity.this,key, Toast.LENGTH_SHORT).show();
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
                 username.setText(user.getUsername());
             readMessages(fuser.getUid(),key);
             }
