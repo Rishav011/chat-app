@@ -9,14 +9,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.fireapp.Adapter.Message_Adapter;
-import com.example.fireapp.Adapter.Users;
-import com.example.fireapp.Adapter.message;
-import com.firebase.ui.auth.data.model.User;
+import com.example.fireapp.model.Users;
+import com.example.fireapp.model.message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +40,7 @@ public class chatActivity extends AppCompatActivity {
     Message_Adapter message_adapter;
     List<message> messages;
     RecyclerView recyclerView;
+    ImageView profileImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,7 @@ public class chatActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         sendButton = findViewById(R.id.btn_send);
         messageText  = findViewById(R.id.text_send);
+        profileImage=findViewById(R.id.profileImage);
         intent=getIntent();
         final String key=intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -80,6 +82,13 @@ public class chatActivity extends AppCompatActivity {
 //                    e.printStackTrace();
 //                }
                 username.setText(user.getUsername());
+                if(user.getImageUrl().equals("default"))
+                {
+                    profileImage.setImageResource(R.mipmap.ic_launcher);
+                }
+                else{
+                    Glide.with(getApplicationContext()).load(user.getImageUrl()).into(profileImage);
+                }
             readMessages(fuser.getUid(),key);
             }
 

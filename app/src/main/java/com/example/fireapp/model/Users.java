@@ -1,4 +1,4 @@
-package com.example.fireapp.Adapter;
+package com.example.fireapp.model;
 
 public class Users {
     public String getUsername() {
@@ -19,9 +19,20 @@ public class Users {
 
     String username;
     String id;
-    public Users(String username, String id) {
+    String ImageUrl;
+
+    public String getImageUrl() {
+        return ImageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        ImageUrl = imageUrl;
+    }
+
+    public Users(String username, String id, String ImageUrl) {
         this.username = username;
         this.id = id;
+        this.ImageUrl=ImageUrl;
     }
 
 

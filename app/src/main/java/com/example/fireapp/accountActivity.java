@@ -151,7 +151,6 @@ public class accountActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             imgData=uri.toString();
-                            Toast.makeText(accountActivity.this, imgData, Toast.LENGTH_SHORT).show();
                             hashMap.put("ImageUrl",imgData);
                             reference.setValue(hashMap);
                         }

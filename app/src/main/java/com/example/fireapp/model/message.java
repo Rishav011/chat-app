@@ -1,4 +1,4 @@
-package com.example.fireapp.Adapter;
+package com.example.fireapp.model;
 
 public class message {
     private String sender;
