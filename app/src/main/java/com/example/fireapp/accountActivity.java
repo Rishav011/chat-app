@@ -1,24 +1,33 @@
 package com.example.fireapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
@@ -30,8 +39,13 @@ public class accountActivity extends AppCompatActivity {
     private EditText cnfPasswordEditText;
     private Button signUpButton;
     private EditText usernameEditText;
-    private Firebase mRootRef;
-
+    private Button imgBtn;
+    private  int PICK_IMAGE_REQUEST=7;
+    private Uri uri;
+    StorageReference storageReference;
+    HashMap<String,Object> hashMap;
+    DatabaseReference reference;
+    String imgData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +56,22 @@ public class accountActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         cnfPasswordEditText = findViewById(R.id.cnfPasswordEditText);
         signUpButton = findViewById(R.id.signUpButton);
+        imgBtn = findViewById(R.id.imgBtn);
+        hashMap = new HashMap<>();
+        imgData="";
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               signup();
+            }
+        });
+        imgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
     }
@@ -72,22 +98,14 @@ public class accountActivity extends AppCompatActivity {
                             mAuth.getCurrentUser();
                             FirebaseUser mUser = mAuth.getCurrentUser();
                             String userid = mUser.getUid();
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User").child(userid);
-
-                            mRootRef = new Firebase("https://fireapp-49e03.firebaseio.com/User");
+                            reference = FirebaseDatabase.getInstance().getReference("User").child(userid);
                             String username = usernameEditText.getText().toString();
 
                             if(mAuth.getCurrentUser() != null)
                             {
-                                HashMap<String,Object> hashMap = new HashMap<>();
-                                hashMap.put("username",username);
-                                hashMap.put("id",userid);
-                                reference.setValue(hashMap);
-                               // mRootRef.child(mAuth.getUid()).child("username").setValue(username);
+                                uploadImage();
+                                uploadData(username,userid);
                             }
-
-//                            Firebase childRef=mRootRef.child("Username");
-//                            childRef.setValue(username);
 
                             startActivity(new Intent(accountActivity.this, Main2Activity.class));
                         }else
@@ -104,5 +122,53 @@ public class accountActivity extends AppCompatActivity {
             }
 
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            uri = data.getData();
+        }
+    }
+    public String GetFileExtension(Uri uri) {
+
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
+
+    }
+
+    private void uploadImage() {
+        if (uri != null) {
+            //this is for image file name
+            storageReference = FirebaseStorage.getInstance().getReference().child("Image_File");
+            final StorageReference filepath = storageReference.child(System.currentTimeMillis() + "." + GetFileExtension(uri));
+            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            imgData=uri.toString();
+                            Toast.makeText(accountActivity.this, imgData, Toast.LENGTH_SHORT).show();
+                            hashMap.put("ImageUrl",imgData);
+                            reference.setValue(hashMap);
+                        }
+                    });
+                }
+            });
+
+        }
+        else{
+            Toast.makeText(this, "sorry!!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void uploadData(String username,String userid){
+        hashMap.put("username",username);
+        hashMap.put("id",userid);
+        reference.setValue(hashMap);
+    }
 
 }
