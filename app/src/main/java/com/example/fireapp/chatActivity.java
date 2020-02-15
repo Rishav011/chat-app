@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,7 +63,9 @@ public class chatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String msg = messageText.getText().toString();
                 if(!msg.trim().isEmpty()){
-                    sendMessage(fuser.getUid(),key,msg);
+                    long time = Calendar.getInstance().getTimeInMillis();
+
+                    sendMessage(fuser.getUid(),key,msg,time);
                 }
                 else{
                     Toast.makeText(chatActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
@@ -99,13 +102,13 @@ public class chatActivity extends AppCompatActivity {
         });
 
     }
-    private void sendMessage(String sender,String receiver,String message){
+    private void sendMessage(String sender, String receiver, String message, long time){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("sender",sender);
         hashMap.put("receiver",receiver);
         hashMap.put("message", message);
-
+        hashMap.put("time",time);
         reference.child("Chats").push().setValue(hashMap);
     }
     private void readMessages(final String myid, final String userid){

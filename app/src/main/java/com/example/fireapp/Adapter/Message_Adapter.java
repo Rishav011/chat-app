@@ -1,6 +1,7 @@
 package com.example.fireapp.Adapter;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.util.Util;
 import com.example.fireapp.R;
 
 import com.example.fireapp.model.message;
@@ -16,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewHolder> {
@@ -48,6 +52,10 @@ public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewH
     @Override
     public void onBindViewHolder(@NonNull Message_Adapter.ViewHolder holder, final int position) {
         message chat =messages.get(position);
+        SimpleDateFormat formatDate = new SimpleDateFormat("hh:mm a");
+        long time = chat.getTime();
+        String newTime=formatDate.format(time);
+        holder.timeText.setText(newTime);
         holder.show_message.setText(chat.getMessage());
     }
 
@@ -58,11 +66,13 @@ public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewH
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView show_message;
+        public TextView timeText;
 
         View mView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             show_message=itemView.findViewById(R.id.show_message);
+            timeText=itemView.findViewById(R.id.text_message_time);
             mView = itemView;
         }
 
