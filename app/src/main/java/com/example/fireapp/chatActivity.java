@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class chatActivity extends AppCompatActivity {
     List<message> messages;
     RecyclerView recyclerView;
     ImageView profileImage;
+    private ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class chatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.btn_send);
         messageText  = findViewById(R.id.text_send);
         profileImage=findViewById(R.id.profileImage);
+       // scrollView=findViewById(R.id.scrollView);
         intent=getIntent();
         final String key=intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -66,6 +69,8 @@ public class chatActivity extends AppCompatActivity {
                     long time = Calendar.getInstance().getTimeInMillis();
 
                     sendMessage(fuser.getUid(),key,msg,time);
+
+                //    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 }
                 else{
                     Toast.makeText(chatActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
@@ -127,6 +132,7 @@ public class chatActivity extends AppCompatActivity {
                         }
                     message_adapter = new Message_Adapter(chatActivity.this,messages);
                     recyclerView.setAdapter(message_adapter);
+                    recyclerView.scrollToPosition(messages.size()-1);
                 }
             }
 
