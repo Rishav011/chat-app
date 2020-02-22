@@ -16,8 +16,6 @@ import com.bumptech.glide.Glide;
 import com.example.fireapp.R;
 import com.example.fireapp.chatActivity;
 import com.example.fireapp.model.Users;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
     private Context context;
     private List<Users> Username;
 
-    public User_Adapter(Context context, List<Users> Username) {
+    public User_Adapter(Context context, List<Users> Username, boolean b) {
 
 //        this.Username = Username;
         this.Username = Username;

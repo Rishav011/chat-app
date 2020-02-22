@@ -43,6 +43,7 @@ public class chatActivity extends AppCompatActivity {
     List<message> messages;
     RecyclerView recyclerView;
     ImageView profileImage;
+    String key;
     private ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class chatActivity extends AppCompatActivity {
         profileImage=findViewById(R.id.profileImage);
        // scrollView=findViewById(R.id.scrollView);
         intent=getIntent();
-        final String key=intent.getStringExtra("userid");
+        key=intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("User").child(key);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +116,22 @@ public class chatActivity extends AppCompatActivity {
         hashMap.put("message", message);
         hashMap.put("time",time);
         reference.child("Chats").push().setValue(hashMap);
+        final DatabaseReference chatRef=FirebaseDatabase.getInstance().getReference("Chatlist")
+                .child(fuser.getUid())
+                .child(key);
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    chatRef.child("id").setValue(key);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
     private void readMessages(final String myid, final String userid){
         messages = new ArrayList<>();

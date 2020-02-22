@@ -67,7 +67,7 @@ public class tab3 extends Fragment {
 
 
                 }
-                user_adapter = new User_Adapter(ctx,mUsers);
+                user_adapter = new User_Adapter(ctx,mUsers, true);
                 recyclerView.setAdapter(user_adapter);
 
             }
