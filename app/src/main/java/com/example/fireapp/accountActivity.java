@@ -14,6 +14,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -40,6 +41,7 @@ public class accountActivity extends AppCompatActivity {
     private Button signUpButton;
     private EditText usernameEditText;
     private Button imgBtn;
+    private ProgressBar progressBar;
     private  int PICK_IMAGE_REQUEST=7;
     private Uri uri;
     StorageReference storageReference;
@@ -57,11 +59,14 @@ public class accountActivity extends AppCompatActivity {
         cnfPasswordEditText = findViewById(R.id.cnfPasswordEditText);
         signUpButton = findViewById(R.id.signUpButton);
         imgBtn = findViewById(R.id.imgBtn);
+        progressBar=findViewById(R.id.progressBar);
         hashMap = new HashMap<>();
         imgData="";
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+
               signup();
             }
         });
@@ -94,6 +99,7 @@ public class accountActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(accountActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
                             mAuth.getCurrentUser();
                             FirebaseUser mUser = mAuth.getCurrentUser();
@@ -110,6 +116,7 @@ public class accountActivity extends AppCompatActivity {
                             startActivity(new Intent(accountActivity.this, Main2Activity.class));
                         }else
                         {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(accountActivity.this, "Sign in failed", Toast.LENGTH_SHORT).show();
                         }
 

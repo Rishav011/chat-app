@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private int RC_SIGN_IN = 1;
     private String TAG ="Info";
+    private ProgressBar progressBar;
 
 
 
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
        loginButton = findViewById(R.id.signUpButton);
        signInButton = findViewById(R.id.signInButton);
        googleButton = findViewById(R.id.googleButton);
-
+        progressBar=findViewById(R.id.progressBar);
        mAuth=FirebaseAuth.getInstance();
        mAuthListner = new FirebaseAuth.AuthStateListener() {
            @Override
@@ -74,12 +76,14 @@ public class MainActivity extends AppCompatActivity {
        loginButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               progressBar.setVisibility(View.VISIBLE);
                login();
            }
        });
        signInButton.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               progressBar.setVisibility(View.INVISIBLE);
                startActivity(new Intent(MainActivity.this,accountActivity.class));
               // finish();
            }
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(this, "Fields are Empty", Toast.LENGTH_SHORT).show();
 
         }else{
@@ -116,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(!task.isSuccessful()){
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(MainActivity.this, "Sign in unsuccessful!!", Toast.LENGTH_SHORT).show();
 
                         }

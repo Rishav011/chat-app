@@ -151,4 +151,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:id="@+id/progressBar"
+        android:visibility="invisible"></androidx.core.widget.ContentLoadingProgressBar>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
