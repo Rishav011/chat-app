@@ -7,4 +7,7 @@
     <string name="tab_text_1">Chats</string>
     <string name="tab_text_2">Status</string>
     <string name="tab_text_3">Contacts</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>

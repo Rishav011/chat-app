@@ -6,11 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fireapp.Adapter.User_Adapter;
 import com.example.fireapp.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,17 +33,22 @@ public class tab3 extends Fragment {
     private List<Users> mUsers;
     private Context ctx;
     private User_Adapter user_adapter;
+    private ProgressBar progressBar;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.tab3,container,false);
+        View view = inflater.inflate(R.layout.tab3, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        progressBar=view.findViewById(R.id.progressBar);
         mUsers = new ArrayList<>();
-        ctx=container.getContext();
-        if(FirebaseAuth.getInstance().getCurrentUser() != null)
-        readUsers();
+        ctx = container.getContext();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            progressBar.setVisibility(View.VISIBLE);
+            readUsers();
+        }
 
         return view;
     }
@@ -52,33 +61,23 @@ public class tab3 extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users users = snapshot.getValue(Users.class);
-                    if(snapshot.exists() && !users.getId().equals(firebaseUser.getUid()))
+                    if (snapshot.exists() && !users.getId().equals(firebaseUser.getUid()))
                     {
-
-                        // if(!users.getId().equals(firebaseUser.getUid())) {
-                        Log.i(TAG, "onDataChange: "+ snapshot.getKey());
+                        progressBar.setVisibility(View.GONE);
+                        Log.i(TAG, "onDataChange: " + snapshot.getKey());
                         mUsers.add(users);
-                        Log.i(TAG, "onDataChange: "+snapshot.getValue());
-
-                        // }
+                        Log.i(TAG, "onDataChange: " + snapshot.getValue());
                     }
-
-
                 }
-                user_adapter = new User_Adapter(ctx,mUsers, true);
+                user_adapter = new User_Adapter(ctx, mUsers, true);
                 recyclerView.setAdapter(user_adapter);
-
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
-
     }
 }

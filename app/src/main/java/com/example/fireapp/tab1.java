@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fireapp.Adapter.User_Adapter;
 import com.example.fireapp.model.Chatlist;
 import com.example.fireapp.model.Users;
-import com.example.fireapp.model.message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,33 +29,30 @@ import java.util.List;
 
 public class tab1 extends Fragment {
     private RecyclerView recyclerView;
-
     private User_Adapter userAdapter;
     private List<Users> mUsers;
-
-    FirebaseUser fuser;
-    DatabaseReference reference;
-
+    private FirebaseUser fuser;
+    private DatabaseReference reference;
     private List<Chatlist> usersList;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab1,container,false);
+        View view = inflater.inflate(R.layout.tab1, container, false);
         recyclerView = view.findViewById(R.id.recycler_view);
+        progressBar=view.findViewById(R.id.progressBar);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-
         usersList = new ArrayList<>();
-
         reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(fuser.getUid());
+        progressBar.setVisibility(View.VISIBLE);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
                 }
@@ -79,14 +76,16 @@ public class tab1 extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users user = snapshot.getValue(Users.class);
-                    for (Chatlist chatlist: usersList){
-                        if (user.getId().equals(chatlist.getId())){
+                    for (Chatlist chatlist : usersList) {
+                        if (user.getId().equals(chatlist.getId())) {
+
                             mUsers.add(user);
                         }
                     }
                 }
+                progressBar.setVisibility(View.GONE);
                 userAdapter = new User_Adapter(getContext(), mUsers, true);
                 recyclerView.setAdapter(userAdapter);
             }

@@ -44,7 +44,6 @@ public class chatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageView profileImage;
     String key;
-    private ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

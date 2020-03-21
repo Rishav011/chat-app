@@ -36,18 +36,19 @@ public class accountActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText;
-    private  EditText passwordEditText;
+    private EditText passwordEditText;
     private EditText cnfPasswordEditText;
     private Button signUpButton;
     private EditText usernameEditText;
     private Button imgBtn;
     private ProgressBar progressBar;
-    private  int PICK_IMAGE_REQUEST=7;
+    private int PICK_IMAGE_REQUEST = 7;
     private Uri uri;
     StorageReference storageReference;
-    HashMap<String,Object> hashMap;
+    HashMap<String, Object> hashMap;
     DatabaseReference reference;
     String imgData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,15 +60,15 @@ public class accountActivity extends AppCompatActivity {
         cnfPasswordEditText = findViewById(R.id.cnfPasswordEditText);
         signUpButton = findViewById(R.id.signUpButton);
         imgBtn = findViewById(R.id.imgBtn);
-        progressBar=findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
         hashMap = new HashMap<>();
-        imgData="";
+        imgData = "";
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
 
-              signup();
+                signup();
             }
         });
         imgBtn.setOnClickListener(new View.OnClickListener() {
@@ -80,55 +81,52 @@ public class accountActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.getCurrentUser();
 
-      }
-        public void signup(){
+    }
+
+    public void signup() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String cnfPassword = cnfPasswordEditText.getText().toString();
-            if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(cnfPassword)) {
-                Toast.makeText(this, "Fields are Empty", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(cnfPassword)) {
+            Toast.makeText(this, "Fields are Empty", Toast.LENGTH_SHORT).show();
 
-            }
-          else if(password.equals(cnfPassword))  {
-                mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(accountActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
-                            mAuth.getCurrentUser();
-                            FirebaseUser mUser = mAuth.getCurrentUser();
-                            String userid = mUser.getUid();
-                            reference = FirebaseDatabase.getInstance().getReference("User").child(userid);
-                            String username = usernameEditText.getText().toString();
+        } else if (password.equals(cnfPassword)) {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(accountActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+                        mAuth.getCurrentUser();
+                        FirebaseUser mUser = mAuth.getCurrentUser();
+                        String userId = mUser.getUid();
+                        reference = FirebaseDatabase.getInstance().getReference("User").child(userId);
+                        String username = usernameEditText.getText().toString();
 
-                            if(mAuth.getCurrentUser() != null)
-                            {
-                                uploadImage();
-                                uploadData(username,userid);
-                            }
-
-                            startActivity(new Intent(accountActivity.this, Main2Activity.class));
-                        }else
-                        {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(accountActivity.this, "Sign in failed", Toast.LENGTH_SHORT).show();
+                        if (mAuth.getCurrentUser() != null) {
+                            uploadImage();
+                            uploadData(username, userId);
                         }
 
+                        startActivity(new Intent(accountActivity.this, Main2Activity.class));
+                    } else {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(accountActivity.this, "Sign in failed", Toast.LENGTH_SHORT).show();
                     }
-                });
-            }
-          else
-            {
-                Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show();
-            }
 
+                }
+            });
+        } else {
+            Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show();
         }
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -138,11 +136,12 @@ public class accountActivity extends AppCompatActivity {
             uri = data.getData();
         }
     }
+
     public String GetFileExtension(Uri uri) {
 
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ;
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
 
     }
 
@@ -157,23 +156,23 @@ public class accountActivity extends AppCompatActivity {
                     filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            imgData=uri.toString();
-                            hashMap.put("ImageUrl",imgData);
+                            imgData = uri.toString();
+                            hashMap.put("ImageUrl", imgData);
                             reference.setValue(hashMap);
                         }
                     });
                 }
             });
 
-        }
-        else{
+        } else {
             Toast.makeText(this, "sorry!!", Toast.LENGTH_SHORT).show();
         }
 
     }
-    private void uploadData(String username,String userid){
-        hashMap.put("username",username);
-        hashMap.put("id",userid);
+
+    private void uploadData(String username, String userId) {
+        hashMap.put("username", username);
+        hashMap.put("id", userId);
         reference.setValue(hashMap);
     }
 

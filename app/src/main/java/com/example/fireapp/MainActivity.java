@@ -48,46 +48,45 @@ public class MainActivity extends AppCompatActivity {
     private SignInButton googleButton;
     private GoogleSignInClient mGoogleSignInClient;
     private int RC_SIGN_IN = 1;
-    private String TAG ="Info";
+    private String TAG = "Info";
     private ProgressBar progressBar;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       emailEditText = findViewById(R.id.emailEditText);
-       passwordEditText = findViewById(R.id.passwordEditText);
-       loginButton = findViewById(R.id.signUpButton);
-       signInButton = findViewById(R.id.signInButton);
-       googleButton = findViewById(R.id.googleButton);
-        progressBar=findViewById(R.id.progressBar);
-       mAuth=FirebaseAuth.getInstance();
-       mAuthListner = new FirebaseAuth.AuthStateListener() {
-           @Override
-           public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-               if(firebaseAuth.getCurrentUser() != null) {
-                   startActivity(new Intent(MainActivity.this,Main2Activity.class));
-                   finish();
-               }
-           }
-       };
-       loginButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               progressBar.setVisibility(View.VISIBLE);
-               login();
-           }
-       });
-       signInButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               progressBar.setVisibility(View.INVISIBLE);
-               startActivity(new Intent(MainActivity.this,accountActivity.class));
-              // finish();
-           }
-       });
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        loginButton = findViewById(R.id.signUpButton);
+        signInButton = findViewById(R.id.signInButton);
+        googleButton = findViewById(R.id.googleButton);
+        progressBar = findViewById(R.id.progressBar);
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListner = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() != null) {
+                    startActivity(new Intent(MainActivity.this, Main2Activity.class));
+                    finish();
+                }
+            }
+        };
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                login();
+            }
+        });
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.GONE);
+                startActivity(new Intent(MainActivity.this, accountActivity.class));
+                // finish();
+            }
+        });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -96,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  dialogbox();
-               signIn();
+                signIn();
             }
         });
 
@@ -109,30 +107,32 @@ public class MainActivity extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthListner);
     }
 
-    private void login(){
+    private void login() {
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            progressBar.setVisibility(View.INVISIBLE);
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Fields are Empty", Toast.LENGTH_SHORT).show();
 
-        }else{
-                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(!task.isSuccessful()){
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(MainActivity.this, "Sign in unsuccessful!!", Toast.LENGTH_SHORT).show();
+        } else {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (!task.isSuccessful()) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "Sign in unsuccessful!!", Toast.LENGTH_SHORT).show();
 
-                        }
                     }
-                });
-            }
+                }
+            });
         }
+    }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -163,12 +164,12 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                           // updateUI(user);
+                            // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                           // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                          //  updateUI(null);
+                            // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            //  updateUI(null);
                         }
 
                         // ...
