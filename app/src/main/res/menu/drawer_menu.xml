@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    >
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/itemA"
-            android:title="itemA" />
+            android:title="Profile Info"
+            android:icon="@drawable/img_profile"/>
         <item
             android:id="@+id/itemB"
-            android:title="itemB"></item>
+            android:title="Feedback"
+            android:icon="@drawable/img_feedback"></item>
     </group>
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/itemC"
+                android:title="Share"
+                android:icon="@drawable/img_share"></item>
+        </menu>
+    </item>
 </menu>
