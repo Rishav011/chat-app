@@ -4,18 +4,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/itemA"
-            android:title="Profile Info"
-            android:icon="@drawable/img_profile"/>
+            android:id="@+id/nav_chat"
+            android:title="Chats"
+            android:icon="@drawable/img_chat"/>
         <item
-            android:id="@+id/itemB"
-            android:title="Feedback"
-            android:icon="@drawable/img_feedback"></item>
+            android:id="@+id/nav_profile"
+            android:title="Profile Info"
+            android:icon="@drawable/img_profile"></item>
     </group>
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/itemC"
+                android:id="@+id/nav_feedback"
+                android:title="Feedback"
+                android:icon="@drawable/img_feedback"></item>
+            <item
+                android:id="@+id/nav_share"
                 android:title="Share"
                 android:icon="@drawable/img_share"></item>
         </menu>
