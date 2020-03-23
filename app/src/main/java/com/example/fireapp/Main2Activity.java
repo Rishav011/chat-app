@@ -19,11 +19,13 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Layout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -38,7 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Main2Activity extends AppCompatActivity {
+public class Main2Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -66,21 +68,22 @@ public class Main2Activity extends AppCompatActivity {
                 R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+
         //user details
         navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         usernameText = headerView.findViewById(R.id.usernameText);
         userImage = headerView.findViewById(R.id.userImage);
         emailText = headerView.findViewById(R.id.userEmail);
         setUserDetails();
+        if(savedInstanceState==null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new chatFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_chat);
+        }
 
-        //tab layout
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,
-                getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
     }
 
     private void setUserDetails() {
@@ -104,6 +107,30 @@ public class Main2Activity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_chat:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new chatFragment()).commit();
+                break;
+            case R.id.nav_profile:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new profileFragment()).commit();
+                break;
+            case R.id.nav_share:
+                Toast.makeText(this, "Share!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_feedback:
+                Toast.makeText(this, "Feedback!", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
