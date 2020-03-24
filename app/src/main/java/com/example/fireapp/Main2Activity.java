@@ -93,12 +93,18 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Users user = dataSnapshot.getValue(Users.class);
+                try {
                 usernameText.setText(user.getUsername());
                 emailText.setText(firebaseUser.getEmail());
-                if (user.getImageUrl().equals("default")) {
-                    userImage.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    Glide.with(getApplicationContext()).load(user.getImageUrl()).into(userImage);
+
+                    if (user.getImageUrl().equals("default")) {
+                        userImage.setImageResource(R.mipmap.ic_launcher);
+                    } else {
+                        Glide.with(getApplicationContext()).load(user.getImageUrl()).into(userImage);
+                    }
+                }
+                catch (Exception e){
+
                 }
             }
 

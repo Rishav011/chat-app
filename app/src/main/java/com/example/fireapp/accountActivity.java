@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class accountActivity extends AppCompatActivity {
@@ -48,6 +51,7 @@ public class accountActivity extends AppCompatActivity {
     HashMap<String, Object> hashMap;
     DatabaseReference reference;
     String imgData;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,8 @@ public class accountActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
+
+
     }
 
     @Override
@@ -134,6 +140,11 @@ public class accountActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             uri = data.getData();
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            } catch (Exception e) {
+            }
+
         }
     }
 
@@ -149,8 +160,12 @@ public class accountActivity extends AppCompatActivity {
         if (uri != null) {
             //this is for image file name
             storageReference = FirebaseStorage.getInstance().getReference().child("Image_File");
-            final StorageReference filepath = storageReference.child(System.currentTimeMillis() + "." + GetFileExtension(uri));
-            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            final StorageReference filepath = storageReference.child(System.currentTimeMillis() +
+                    "." + GetFileExtension(uri));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+            byte[] data = baos.toByteArray();
+            filepath.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -159,6 +174,7 @@ public class accountActivity extends AppCompatActivity {
                             imgData = uri.toString();
                             hashMap.put("ImageUrl", imgData);
                             reference.setValue(hashMap);
+                            //Toast.makeText(accountActivity.this, "success!", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
