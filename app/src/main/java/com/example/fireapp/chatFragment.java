@@ -24,6 +24,7 @@ public class chatFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_chat, container, false);
         tabLayout = view.findViewById(R.id.tabs);
+        tabLayout.bringToFront();
         viewPager = view.findViewById(R.id.view_pager);
         viewPager.setAdapter(new SectionsPagerAdapter(getChildFragmentManager()));
         tabLayout.post(new Runnable() {
@@ -32,6 +33,7 @@ public class chatFragment extends Fragment {
                 tabLayout.setupWithViewPager(viewPager);
             }
         });
+        tabLayout.setupWithViewPager(viewPager);
         return view;
     }
 }
