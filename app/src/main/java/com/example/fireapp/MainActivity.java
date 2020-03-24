@@ -23,6 +23,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "Info";
     private ProgressBar progressBar;
     int flag=0;
+   DatabaseReference reference;
+
+    //firebase
+    FirebaseUser user;
+    String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 if (firebaseAuth.getCurrentUser() != null && flag!=1) {
                     startActivity(new Intent(MainActivity.this, Main2Activity.class));
                     finish();
+
                 }
             }
         };
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,10 +159,29 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(MainActivity.this,DetailsActivity.class));
-                            finish();
+                           user = mAuth.getCurrentUser();
+                           userId=user.getUid();
+                           reference = FirebaseDatabase.getInstance().getReference("User").child(userId);
+                           reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                               @Override
+                               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                   if(dataSnapshot.exists()) {
+                                       startActivity(new Intent(MainActivity.this, Main2Activity.class));
+                                       Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
+                                       finish();
+                                   }
+                                    else{
+                                           startActivity(new Intent(MainActivity.this,DetailsActivity.class));
+                                       Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
+                                       finish();
+                                       }
+                                   }
+                               @Override
+                               public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                               }
+                           });
+
                             flag=1;
                         } else {
                             // If sign in fails, display a message to the user.
