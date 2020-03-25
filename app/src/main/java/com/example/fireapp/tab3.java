@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,15 +35,18 @@ public class tab3 extends Fragment {
     private Context ctx;
     private User_Adapter user_adapter;
     private ProgressBar progressBar;
+    private TextView last_msg;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab3, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
+        last_msg=view.findViewById(R.id.last_msg);
+    //    last_msg.setVisibility(View.INVISIBLE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        progressBar=view.findViewById(R.id.progressBar);
+        progressBar = view.findViewById(R.id.progressBar);
         mUsers = new ArrayList<>();
         ctx = container.getContext();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -63,8 +67,7 @@ public class tab3 extends Fragment {
                 mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users users = snapshot.getValue(Users.class);
-                    if (snapshot.exists() && !users.getId().equals(firebaseUser.getUid()))
-                    {
+                    if (snapshot.exists() && !users.getId().equals(firebaseUser.getUid())) {
                         progressBar.setVisibility(View.GONE);
                         Log.i(TAG, "onDataChange: " + snapshot.getKey());
                         mUsers.add(users);
@@ -74,6 +77,7 @@ public class tab3 extends Fragment {
                 user_adapter = new User_Adapter(ctx, mUsers, true);
                 recyclerView.setAdapter(user_adapter);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

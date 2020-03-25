@@ -3,6 +3,7 @@ package com.example.fireapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.DashPathEffect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,14 @@ import com.bumptech.glide.Glide;
 import com.example.fireapp.R;
 import com.example.fireapp.chatActivity;
 import com.example.fireapp.model.Users;
+import com.example.fireapp.model.message;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -23,6 +32,7 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
 
     private Context context;
     private List<Users> Username;
+    String theLastMessage;
 
     public User_Adapter(Context context, List<Users> Username, boolean b) {
 
@@ -52,8 +62,8 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
         else{
             Glide.with(context).load(user.getImageUrl()).into(holder.profileImage);
         }
-     //   final DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User");
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        lastMessage(user.getId(),holder.last_msg);
+    holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent (context,chatActivity.class);
@@ -73,11 +83,47 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         View mView;
         public ImageView profileImage;
+        private  TextView last_msg;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
             profileImage=mView.findViewById(R.id.profileImage);
+            last_msg=mView.findViewById(R.id.last_msg);
         }
+
+    }
+
+    //check for last message
+    private void lastMessage(final String userid, final TextView last_msg){
+        theLastMessage = "default";
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    message chat = snapshot.getValue(message.class);
+                    if(chat.getReceiver().equals(firebaseUser.getUid())&& chat.getSender().equals(userid)||
+                            chat.getReceiver().equals(userid)&& chat.getSender().equals(firebaseUser.getUid()) ){
+                        theLastMessage=chat.getMessage();
+                    }
+                }
+                switch (theLastMessage){
+                    case "default":
+                        last_msg.setText("");
+                        break;
+
+                        default:
+                            last_msg.setText(theLastMessage);
+                }
+                theLastMessage="default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

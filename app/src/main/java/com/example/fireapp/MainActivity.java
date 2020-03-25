@@ -1,6 +1,8 @@
 package com.example.fireapp;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -42,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 1;
     private String TAG = "Info";
     private ProgressBar progressBar;
-    int flag=0;
-   DatabaseReference reference;
+    int flag = 0;
+    DatabaseReference reference;
 
     //firebase
     FirebaseUser user;
     String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
         mAuthListner = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null && flag!=1) {
+                if (firebaseAuth.getCurrentUser() != null && flag != 1) {
                     startActivity(new Intent(MainActivity.this, Main2Activity.class));
                     finish();
-
                 }
+
             }
         };
 
@@ -93,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                flag = 1;
                 signIn();
             }
         });
-
     }
 
     @Override
@@ -111,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Fields are Empty", Toast.LENGTH_SHORT).show();
-
         } else {
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -120,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(MainActivity.this, "Sign in unsuccessful!!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
         }
@@ -159,30 +161,30 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                           user = mAuth.getCurrentUser();
-                           userId=user.getUid();
-                           reference = FirebaseDatabase.getInstance().getReference("User").child(userId);
-                           reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                               @Override
-                               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                   if(dataSnapshot.exists()) {
-                                       startActivity(new Intent(MainActivity.this, Main2Activity.class));
-                                       Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
-                                       finish();
-                                   }
-                                    else{
-                                           startActivity(new Intent(MainActivity.this,DetailsActivity.class));
-                                       Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
-                                       finish();
-                                       }
-                                   }
-                               @Override
-                               public void onCancelled(@NonNull DatabaseError databaseError) {
+                            user = mAuth.getCurrentUser();
+                            userId = user.getUid();
+                            reference = FirebaseDatabase.getInstance().getReference("User").child(userId);
+                            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
+                                        Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
+                                        finish();
 
-                               }
-                           });
+                                    } else {
+                                        startActivity(new Intent(MainActivity.this, DetailsActivity.class));
+                                        Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                }
 
-                            flag=1;
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

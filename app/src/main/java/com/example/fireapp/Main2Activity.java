@@ -70,7 +70,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         toggle.syncState();
 
 
-        //user details
+        //user details inside navigation drawer
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);

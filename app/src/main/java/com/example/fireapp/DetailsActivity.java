@@ -38,7 +38,7 @@ public class DetailsActivity extends AppCompatActivity {
     Button proceedButton;
     FirebaseAuth mAuth;
     DatabaseReference reference;
-    HashMap<String,Object> hashMap;
+    HashMap<String, Object> hashMap;
     private int PICK_IMAGE_REQUEST = 7;
     private Uri uri;
     StorageReference storageReference;
@@ -47,6 +47,7 @@ public class DetailsActivity extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseUser mUser;
     String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,22 +61,22 @@ public class DetailsActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         userId = mUser.getUid();
         reference = FirebaseDatabase.getInstance().getReference("User").child(userId);
-            imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-                }
-            });
-            proceedButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    proceed();
-                }
-            });
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+            }
+        });
+        proceedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                proceed();
+            }
+        });
 
     }
 
@@ -106,6 +107,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         }
     }
+
     public String GetFileExtension(Uri uri) {
 
         ContentResolver contentResolver = getContentResolver();
@@ -113,14 +115,15 @@ public class DetailsActivity extends AppCompatActivity {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
 
     }
+
     private void uploadImage() {
         if (uri != null) {
             //this is for image file name
             storageReference = FirebaseStorage.getInstance().getReference().child("Image_File");
             final StorageReference filepath = storageReference.child(System.currentTimeMillis() +
                     "." + GetFileExtension(uri));
-            ByteArrayOutputStream baos=new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,25,baos);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
             byte[] data = baos.toByteArray();
             filepath.putBytes(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override

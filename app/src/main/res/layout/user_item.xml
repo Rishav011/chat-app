@@ -19,4 +19,16 @@
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
         android:textSize="18sp"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username"
+        android:layout_toRightOf="@+id/profileImage"
+        android:layout_marginTop="10dp"
+        android:paddingTop="5dp"
+        android:id="@+id/last_msg"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="10dp"
+        android:maxLines="1"
+        android:text="hello"></TextView>
 </RelativeLayout>
