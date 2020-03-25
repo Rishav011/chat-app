@@ -35,15 +35,12 @@ public class tab3 extends Fragment {
     private Context ctx;
     private User_Adapter user_adapter;
     private ProgressBar progressBar;
-    private TextView last_msg;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab3, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        last_msg=view.findViewById(R.id.last_msg);
-    //    last_msg.setVisibility(View.INVISIBLE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         progressBar = view.findViewById(R.id.progressBar);

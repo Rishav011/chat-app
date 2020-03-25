@@ -10,10 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.fireapp.Adapter.Message_Adapter;
 import com.example.fireapp.model.Users;
@@ -44,7 +43,7 @@ public class chatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageView profileImage;
     String key;
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +59,19 @@ public class chatActivity extends AppCompatActivity {
         intent = getIntent();
         key = intent.getStringExtra("userid");
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-
-
-
+        //toolbar
+        toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //back button
+       toolbar.setNavigationIcon(R.drawable.back_button);
+       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               finish();
+           }
+       });
+       //send message
         reference = FirebaseDatabase.getInstance().getReference("User").child(key);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

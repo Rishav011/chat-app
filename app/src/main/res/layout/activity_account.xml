@@ -142,7 +142,7 @@
         android:background="@drawable/input_bg"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:paddingHorizontal="10dp"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textColorHint="@android:color/darker_gray"
