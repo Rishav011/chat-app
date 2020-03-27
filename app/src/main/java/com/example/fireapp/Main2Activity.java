@@ -82,7 +82,7 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users user = dataSnapshot.getValue(Users.class);
+               Users user= dataSnapshot.getValue(Users.class);
                 try {
                 usernameText.setText(user.getUsername());
                 emailText.setText(firebaseUser.getEmail());
@@ -115,6 +115,10 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
             case R.id.nav_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new profileFragment()).commit();
+                break;
+            case R.id.nav_feed:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new feedFragment()).commit();
                 break;
             case R.id.nav_share:
                 Toast.makeText(this, "Share!", Toast.LENGTH_SHORT).show();

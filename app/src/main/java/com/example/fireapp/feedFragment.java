@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fireapp.Adapter.feedAdapter;
 import com.example.fireapp.model.Image;
+import com.example.fireapp.model.Like;
 import com.example.fireapp.model.Users;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -85,7 +87,7 @@ public class feedFragment extends Fragment {
         recyclerView.setDrawingCacheEnabled(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new feedAdapter(images, this,1);
+        mAdapter = new feedAdapter(images, this,getContext());
         recyclerView.setAdapter(mAdapter);
 
         //get the latest images
@@ -102,6 +104,46 @@ public class feedFragment extends Fragment {
                         Users user = dataSnapshot.getValue(Users.class);
                         image.user = user;
                         mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                Query likesQuery = reference.child("likes").orderByChild("imageId").equalTo(image.key);
+                likesQuery.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Like like = dataSnapshot.getValue(Like.class);
+                        image.addLike();
+                        if(like.userId.equals(mUser.getUid())){
+                            image.hasLiked=true;
+                            image.userLike=dataSnapshot.getKey();
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        Like like = dataSnapshot.getValue(Like.class);
+                        image.removeLike();
+                        if(like.userId.equals(mUser.getUid())){
+                            image.hasLiked = false;
+                            image.userLike=null;
+                        }
+                        mAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                     }
 
                     @Override
@@ -132,7 +174,6 @@ public class feedFragment extends Fragment {
 
             }
         });
-
         return  view;
     }
 
@@ -173,8 +214,9 @@ public class feedFragment extends Fragment {
                             @Override
                             public void onSuccess(Uri uri) {
                                 downloadUrl=uri.toString();
+                                long time = Calendar.getInstance().getTimeInMillis();
                                 String key=reference.child("Feed_Images").push().getKey();
-                                Image image = new Image(key,mUser.getUid(),downloadUrl);
+                                Image image = new Image(key,mUser.getUid(),downloadUrl,time);
                                 reference.child("Feed_Images").child(key).setValue(image);
                                 Toast.makeText(getContext(), "Upload successful!", Toast.LENGTH_SHORT).show();
                                 //Toast.makeText(accountActivity.this, "success!", Toast.LENGTH_SHORT).show();
@@ -195,5 +237,22 @@ public class feedFragment extends Fragment {
         }
     }
 
+    //like
+    public void setLiked(Image image) {
+        if(!image.hasLiked) {
+            // add new Like
+            image.hasLiked = true;
+            Like like = new Like(image.key, mUser.getUid());
+            String key = reference.child("likes").push().getKey();
+            reference.child("likes").child(key).setValue(like);
+            image.userLike = key;
+        } else {
+            // remove Like
+            image.hasLiked = false;
+            if (image.userLike != null) {
+                reference.child("likes").child(image.userLike).removeValue();
+            }
+        }
+    }
 
 }

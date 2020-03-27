@@ -8,9 +8,14 @@
             android:title="Chats"
             android:icon="@drawable/img_chat"/>
         <item
+            android:id="@+id/nav_feed"
+            android:title="Feed"
+            android:icon="@drawable/img_feed"></item>
+        <item
             android:id="@+id/nav_profile"
             android:title="Profile Info"
             android:icon="@drawable/img_profile"></item>
+
     </group>
     <item android:title="Communicate">
         <menu>

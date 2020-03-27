@@ -6,19 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fireapp.R;
 import com.example.fireapp.model.message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewHolder> {
+public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHolder> {
 
-    public static final int MSG_TYPE_LEFT=1;
-    public static final int MSG_TYPE_RIGHT=0;
+    public static final int MSG_TYPE_LEFT = 1;
+    public static final int MSG_TYPE_RIGHT = 0;
     private Context context;
     private List<message> messages;
     FirebaseUser fUser;
@@ -44,29 +47,27 @@ public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull Message_Adapter.ViewHolder holder, final int position) {
-        message chat =messages.get(position);
+        message chat = messages.get(position);
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm a");
         SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
         long time = chat.getTime();
-        String newTime=formatTime.format(time);
-        String newDate=formatDate.format(time);
+        String newTime = formatTime.format(time);
+        String newDate = formatDate.format(time);
         holder.dateText.setText(newDate);
-        if(position>0)
-        {
-            message message1= messages.get(position);
-            message message2 = messages.get(position-1);
-            String newDate1=formatDate.format(message1.getTime());
-            String newDate2=formatDate.format(message2.getTime());
-            if(newDate1.equals(newDate2))
-            {
+        if (position > 0) {
+            message message1 = messages.get(position);
+            message message2 = messages.get(position - 1);
+            String newDate1 = formatDate.format(message1.getTime());
+            String newDate2 = formatDate.format(message2.getTime());
+            if (newDate1.equals(newDate2)) {
                 holder.dateText.setVisibility(View.GONE);
-            }else{
+            } else {
                 holder.dateText.setVisibility(View.VISIBLE);
             }
         }
         holder.timeText.setText(newTime);
         holder.show_message.setText(chat.getMessage());
-        }
+    }
 
 
     @Override
@@ -80,10 +81,11 @@ public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewH
         public TextView dateText;
 
         View mView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            show_message=itemView.findViewById(R.id.show_message);
-            timeText=itemView.findViewById(R.id.text_message_time);
+            show_message = itemView.findViewById(R.id.show_message);
+            timeText = itemView.findViewById(R.id.text_message_time);
             dateText = itemView.findViewById(R.id.text_message_date);
             mView = itemView;
         }
@@ -93,7 +95,7 @@ public class Message_Adapter  extends RecyclerView.Adapter<Message_Adapter.ViewH
     @Override
     public int getItemViewType(int position) {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (messages.get(position).getSender().equals(fUser.getUid())){
+        if (messages.get(position).getSender().equals(fUser.getUid())) {
             return MSG_TYPE_RIGHT;
         } else {
             return MSG_TYPE_LEFT;

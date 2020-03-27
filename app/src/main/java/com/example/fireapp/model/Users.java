@@ -1,5 +1,4 @@
 package com.example.fireapp.model;
-
 public class Users {
     public String getUsername() {
         return username;
@@ -17,8 +16,8 @@ public class Users {
         this.id = id;
     }
 
-    String username;
-    String id;
+    public String username;
+    public String id;
     String ImageUrl;
 
     public String getImageUrl() {
@@ -32,12 +31,10 @@ public class Users {
     public Users(String username, String id, String ImageUrl) {
         this.username = username;
         this.id = id;
-        this.ImageUrl=ImageUrl;
+        this.ImageUrl = ImageUrl;
     }
 
 
     public Users() {
     }
-
-
 }
