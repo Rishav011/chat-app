@@ -44,5 +44,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha01'
-   }
+}
 apply plugin: 'com.google.gms.google-services'

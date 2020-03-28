@@ -75,7 +75,6 @@ public class Main2Activity extends AppCompatActivity implements NavigationView.O
         }
 
     }
-
     private void setUserDetails() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("User").child(firebaseUser.getUid());
