@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,13 +61,12 @@ public class feedFragment extends Fragment {
     ArrayList<Image> images = new ArrayList<>();
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feed,container,false);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
         //upload image
-        uploadButton=view.findViewById(R.id.uploadButton);
+        uploadButton = view.findViewById(R.id.uploadButton);
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,13 +82,13 @@ public class feedFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference();
 
         //setup recycler view
-        recyclerView=view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new feedAdapter(images, this,getContext());
+        mAdapter = new feedAdapter(images, this, getContext());
         recyclerView.setAdapter(mAdapter);
 
         //get the latest images
@@ -98,7 +99,7 @@ public class feedFragment extends Fragment {
                 final Image image = dataSnapshot.getValue(Image.class);
 
                 //get the image user
-                reference.child("User/"+image.userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                reference.child("User/" + image.userId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Users user = dataSnapshot.getValue(Users.class);
@@ -117,9 +118,9 @@ public class feedFragment extends Fragment {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Like like = dataSnapshot.getValue(Like.class);
                         image.addLike();
-                        if(like.userId.equals(mUser.getUid())){
-                            image.hasLiked=true;
-                            image.userLike=dataSnapshot.getKey();
+                        if (like.userId.equals(mUser.getUid())) {
+                            image.hasLiked = true;
+                            image.userLike = dataSnapshot.getKey();
                         }
                         mAdapter.notifyDataSetChanged();
                     }
@@ -133,9 +134,9 @@ public class feedFragment extends Fragment {
                     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                         Like like = dataSnapshot.getValue(Like.class);
                         image.removeLike();
-                        if(like.userId.equals(mUser.getUid())){
+                        if (like.userId.equals(mUser.getUid())) {
                             image.hasLiked = false;
-                            image.userLike=null;
+                            image.userLike = null;
                         }
                         mAdapter.notifyDataSetChanged();
 
@@ -174,7 +175,7 @@ public class feedFragment extends Fragment {
 
             }
         });
-        return  view;
+        return view;
     }
 
     //get extension of file
@@ -213,10 +214,10 @@ public class feedFragment extends Fragment {
                         filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                downloadUrl=uri.toString();
+                                downloadUrl = uri.toString();
                                 long time = Calendar.getInstance().getTimeInMillis();
-                                String key=reference.child("Feed_Images").push().getKey();
-                                Image image = new Image(key,mUser.getUid(),downloadUrl,time);
+                                String key = reference.child("Feed_Images").push().getKey();
+                                Image image = new Image(key, mUser.getUid(), downloadUrl, time);
                                 reference.child("Feed_Images").child(key).setValue(image);
                                 Toast.makeText(getContext(), "Upload successful!", Toast.LENGTH_SHORT).show();
                                 //Toast.makeText(accountActivity.this, "success!", Toast.LENGTH_SHORT).show();
@@ -239,7 +240,7 @@ public class feedFragment extends Fragment {
 
     //like
     public void setLiked(Image image) {
-        if(!image.hasLiked) {
+        if (!image.hasLiked) {
             // add new Like
             image.hasLiked = true;
             Like like = new Like(image.key, mUser.getUid());

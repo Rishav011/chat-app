@@ -43,8 +43,8 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
     @NonNull
     @Override
     public User_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,parent,false);
-        ViewHolder viewHolder=new ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
@@ -52,21 +52,19 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
     public void onBindViewHolder(@NonNull User_Adapter.ViewHolder holder, final int position) {
         final Users user = Username.get(position);
         TextView name = holder.mView.findViewById(R.id.username);
-           // holder.mView.
+        // holder.mView.
         name.setText(user.getUsername());
-        if(user.getImageUrl().equals("default"))
-        {
+        if (user.getImageUrl().equals("default")) {
             holder.profileImage.setImageResource(R.mipmap.ic_launcher);
-        }
-        else{
+        } else {
             Glide.with(context).load(user.getImageUrl()).into(holder.profileImage);
         }
-        lastMessage(user.getId(),holder.last_msg);
-    holder.mView.setOnClickListener(new View.OnClickListener() {
+        lastMessage(user.getId(), holder.last_msg);
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent (context,chatActivity.class);
-                intent.putExtra("userid",user.getId());
+                Intent intent = new Intent(context, chatActivity.class);
+                intent.putExtra("userid", user.getId());
                 context.startActivity(intent);
             }
         });
@@ -80,40 +78,44 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         View mView;
         public ImageView profileImage;
-        private  TextView last_msg;
+        private TextView last_msg;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
-            profileImage=mView.findViewById(R.id.profileImage);
-            last_msg=mView.findViewById(R.id.last_msg);
+            profileImage = mView.findViewById(R.id.profileImage);
+            last_msg = mView.findViewById(R.id.last_msg);
         }
 
     }
 
     //check for last message
-    private void lastMessage(final String userid, final TextView last_msg){
+    private void lastMessage(final String userid, final TextView last_msg) {
         theLastMessage = ".fkBNDFk.ndv.z.vurg;n>F";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     message chat = snapshot.getValue(message.class);
-                    if(chat.getReceiver().equals(firebaseUser.getUid())&& chat.getSender().equals(userid)||
-                            chat.getReceiver().equals(userid)&& chat.getSender().equals(firebaseUser.getUid()) ){
-                        theLastMessage=chat.getMessage();
+                    try {
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                            theLastMessage = chat.getMessage();
+                        }
+                    } catch (Exception e) {
                     }
                 }
-                switch (theLastMessage){
+                switch (theLastMessage) {
                     case ".fkBNDFk.ndv.z.vurg;n>F":
                         last_msg.setText("");
                         break;
 
-                        default:
-                            last_msg.setText(theLastMessage);
+                    default:
+                        last_msg.setText(theLastMessage);
                 }
-                theLastMessage=".fkBNDFk.ndv.z.vurg;n>F";
+                theLastMessage = ".fkBNDFk.ndv.z.vurg;n>F";
             }
 
             @Override

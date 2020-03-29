@@ -11,13 +11,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.fireapp.R;
 import com.example.fireapp.feedFragment;
 import com.example.fireapp.model.Image;
+import com.example.fireapp.model.Users;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
     private ArrayList<Image> mDataset;
@@ -25,12 +29,11 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
     private Context context;
 
 
-    public feedAdapter(ArrayList<Image> myDataset, feedFragment feedFragment,Context context) {
-        mDataset=myDataset;
-        mfeedFragment=feedFragment;
-        this.context=context;
+    public feedAdapter(ArrayList<Image> myDataset, feedFragment feedFragment, Context context) {
+        mDataset = myDataset;
+        mfeedFragment = feedFragment;
+        this.context = context;
     }
-
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -38,21 +41,25 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         public ImageView mImageView;
         public Button mLikeButton;
         public TextView timeStamp;
+        public TextView likesTextView;
+        public ImageView profileImage;
 
 
-        public ViewHolder(View v){
+        public ViewHolder(View v) {
             super(v);
             mTextView = v.findViewById(R.id.textView2);
             mImageView = v.findViewById(R.id.imageView);
-            mLikeButton=v.findViewById(R.id.likeButton);
-            timeStamp=v.findViewById(R.id.timeStamp);
+            mLikeButton = v.findViewById(R.id.likeButton);
+            timeStamp = v.findViewById(R.id.timeStamp);
+            likesTextView = v.findViewById(R.id.likesTextView);
+            profileImage = v.findViewById(R.id.profileImage);
         }
     }
 
     @NonNull
     @Override
     public feedAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_image,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_image, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -62,6 +69,12 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         final Image image = mDataset.get(position);
         SimpleDateFormat formatTime = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
         long time = image.getTimestamp();
+        try {
+            Glide.with(context).load(image.user.getImageUrl()).into(holder.profileImage);
+
+        } catch (Exception e) {
+
+        }
         String newTime = formatTime.format(time);
         if (image.user != null) {
             holder.mTextView.setText(image.user.username);
@@ -71,11 +84,17 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         }
         Picasso.get().load(image.downloadUrl).fit().into(holder.mImageView);
 
-        holder.mLikeButton.setText("Like (" + image.likes + ")");
-        if(image.hasLiked) {
-            holder.mLikeButton.setBackgroundColor(ContextCompat.getColor(context,R.color.colorAccent));
+        String likes = String.valueOf(image.likes);
+        if (image.likes == 0 || image.likes == 1)
+            holder.likesTextView.setText(likes + " Like");
+        else
+            holder.likesTextView.setText(likes + " Likes");
+        if (image.hasLiked) {
+            holder.mLikeButton.setText("Liked");
+            //holder.mLikeButton.setBackgroundColor(ContextCompat.getColor(context,R.color.colorAccent));
         } else {
-            holder.mLikeButton.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimary));
+            holder.mLikeButton.setText("Like");
+            // holder.mLikeButton.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimary));
         }
         holder.mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +109,9 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
     public int getItemCount() {
         return mDataset.size();
     }
-    public void addImage(Image image){
-        mDataset.add(0,image);
+
+    public void addImage(Image image) {
+        mDataset.add(0, image);
         notifyDataSetChanged();
     }
 }
