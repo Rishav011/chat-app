@@ -2,11 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Hello World"
-    android:layout_centerVertical="true"
-    android:layout_centerHorizontal="true"
-    android:textSize="30dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/profileImage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-39dp"
+        android:layout_marginEnd="135dp"
+        android:background="@drawable/buttonshape"
+        android:text="+"
+        android:id="@+id/updateImageButton"></Button>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileImage"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/brawler"
+        android:text="Welcome ,"
+        android:textSize="25dp"></TextView>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:hint="Enter new Username"
+        android:inputType="textCapWords"
+        android:id="@+id/usernameEditText"
+
+        ></EditText>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usernameEditText"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_bg"
+        android:layout_marginTop="20dp"
+        android:text="Update"
+        android:id="@+id/updateButton"></Button>
 </RelativeLayout>

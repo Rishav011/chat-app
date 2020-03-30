@@ -82,7 +82,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
 
 
         }
-        Picasso.get().load(image.downloadUrl).fit().into(holder.mImageView);
+        Picasso.get().load(image.downloadUrl).into(holder.mImageView);
 
         String likes = String.valueOf(image.likes);
         if (image.likes == 0 || image.likes == 1)

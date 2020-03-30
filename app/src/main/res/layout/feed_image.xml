@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -66,7 +66,8 @@
         android:background="@drawable/buttonshape"
         android:fontFamily="@font/brawler"
         android:text="Like"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+       />
 
     <TextView
         android:id="@+id/likesTextView"
@@ -76,7 +77,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
         android:fontFamily="serif"
-        android:text="sample text"
+        android:text="no of likes"
         android:textSize="15sp"></TextView>
 
     <View
