@@ -108,7 +108,6 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
             public void onClick(View v) {
                Intent intent = new Intent(context, CommentsActivity.class);
                intent.putExtra("postid",image.key);
-                Log.i("postid",image.key);
                context.startActivity(intent);
             }
         });

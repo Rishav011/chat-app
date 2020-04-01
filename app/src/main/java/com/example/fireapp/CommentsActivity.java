@@ -56,7 +56,6 @@ public class CommentsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         intent = getIntent();
         postid = intent.getStringExtra("postid");
-        Log.i("postid",postid);
         commentAdapter = new commentAdapter(comments,CommentsActivity.this);
         recyclerView.setAdapter(commentAdapter);
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
