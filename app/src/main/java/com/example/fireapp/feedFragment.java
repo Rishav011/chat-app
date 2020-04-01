@@ -54,7 +54,6 @@ public class feedFragment extends Fragment {
     DatabaseReference reference;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-
     RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     feedAdapter mAdapter;

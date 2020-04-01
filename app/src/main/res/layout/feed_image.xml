@@ -56,11 +56,9 @@
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_below="@+id/imageView"
-        android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="35dp"
-        android:layout_marginEnd="283dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/buttonshape"
@@ -68,6 +66,17 @@
         android:text="Like"
         android:textSize="15dp"
        />
+    <Button
+        android:id="@+id/commentButton"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/likeButton"
+        android:layout_below="@+id/timeStamp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/buttonshape"
+        android:fontFamily="@font/brawler"
+        android:text="comments"></Button>
 
     <TextView
         android:id="@+id/likesTextView"

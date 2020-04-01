@@ -62,7 +62,7 @@
             android:layout_height="40dp"
             android:id="@+id/text_send"
             android:background="@android:color/transparent"
-            android:hint="Type a message..."
+            android:hint="Write a comment..."
             android:layout_toLeftOf="@id/btn_send"
             android:layout_centerVertical="true"
             android:inputType="textCapWords"

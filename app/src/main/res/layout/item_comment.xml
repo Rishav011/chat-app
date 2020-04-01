@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        ></de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/usernameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/profileImage"
+        android:text="Username"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"></TextView>
+
+    <TextView
+        android:id="@+id/commentedOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@+id/usernameTextView"
+        android:text="commented on"
+        android:textSize="15sp"></TextView>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/commentedOn"
+        android:fontFamily="serif-monospace"
+        android:text="Date"
+        android:textSize="14sp"
+        android:textStyle="bold"></TextView>
+
+    <TextView
+        android:id="@+id/commentsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/usernameTextView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/berkshire_swash"
+        android:text="Comments will be shown here..."
+        android:textSize="17sp"></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/commentsTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:fontFamily="serif-monospace"
+        android:text="Time"
+        android:id="@+id/timeTextView"
+        android:textSize="10sp"
+        android:textStyle="bold"></TextView>
+
+
+
+</RelativeLayout>

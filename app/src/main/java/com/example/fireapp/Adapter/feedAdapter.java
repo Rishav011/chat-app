@@ -1,27 +1,24 @@
 package com.example.fireapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
+import com.example.fireapp.CommentsActivity;
 import com.example.fireapp.R;
 import com.example.fireapp.feedFragment;
 import com.example.fireapp.model.Image;
-import com.example.fireapp.model.Users;
 import com.squareup.picasso.Picasso;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
     private ArrayList<Image> mDataset;
@@ -43,6 +40,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         public TextView timeStamp;
         public TextView likesTextView;
         public ImageView profileImage;
+        public Button commentButton;
 
 
         public ViewHolder(View v) {
@@ -53,6 +51,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
             timeStamp = v.findViewById(R.id.timeStamp);
             likesTextView = v.findViewById(R.id.likesTextView);
             profileImage = v.findViewById(R.id.profileImage);
+            commentButton = v.findViewById(R.id.commentButton);
         }
     }
 
@@ -77,7 +76,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         }
         String newTime = formatTime.format(time);
         if (image.user != null) {
-            holder.mTextView.setText(image.user.username);
+            holder.mTextView.setText(image.user.getUsername());
             holder.timeStamp.setText(newTime);
 
 
@@ -100,6 +99,13 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 mfeedFragment.setLiked(image);
+            }
+        });
+        //comments
+        holder.commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, CommentsActivity.class));
             }
         });
 
