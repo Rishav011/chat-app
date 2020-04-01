@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +41,8 @@ public class CommentsActivity extends AppCompatActivity {
    DatabaseReference reference;
    ArrayList<Comment> comments = new ArrayList<>();
    commentAdapter commentAdapter;
+   Intent intent;
+   String postid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +54,13 @@ public class CommentsActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        intent = getIntent();
+        postid = intent.getStringExtra("postid");
+        Log.i("postid",postid);
         commentAdapter = new commentAdapter(comments,CommentsActivity.this);
         recyclerView.setAdapter(commentAdapter);
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        Query commentsQuery = databaseReference.child("Comments").orderByKey().limitToFirst(100);
+        Query commentsQuery = databaseReference.child("Comments").orderByChild("postid").equalTo(postid);
         commentsQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -102,7 +109,7 @@ public class CommentsActivity extends AppCompatActivity {
             public void onClick(View v) {
                String comment = commentEditText.getText().toString();
                if(!comment.trim().isEmpty())
-                PostComment(mUser.getUid(),comment);
+                PostComment(mUser.getUid(),comment,postid);
                else
                    Toast.makeText(CommentsActivity.this, "Please enter comment!", Toast.LENGTH_SHORT).show();
                commentEditText.setText("");
@@ -111,13 +118,14 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void PostComment(String id,String comment) {
+    private void PostComment(String id,String comment,String postid) {
         reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap= new HashMap<>();
         long timestamp = Calendar.getInstance().getTimeInMillis();
         hashMap.put("id",id);
         hashMap.put("comment",comment);
         hashMap.put("timestamp",timestamp);
+        hashMap.put("postid",postid);
         reference.child("Comments").push().setValue(hashMap);
     }
 }

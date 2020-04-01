@@ -2,6 +2,7 @@ package com.example.fireapp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,7 +106,10 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         holder.commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, CommentsActivity.class));
+               Intent intent = new Intent(context, CommentsActivity.class);
+               intent.putExtra("postid",image.key);
+                Log.i("postid",image.key);
+               context.startActivity(intent);
             }
         });
 
