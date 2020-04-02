@@ -42,6 +42,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         public TextView likesTextView;
         public ImageView profileImage;
         public Button commentButton;
+        public TextView  commentsTextView;
 
 
         public ViewHolder(View v) {
@@ -53,6 +54,7 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
             likesTextView = v.findViewById(R.id.likesTextView);
             profileImage = v.findViewById(R.id.profileImage);
             commentButton = v.findViewById(R.id.commentButton);
+            commentsTextView = v.findViewById(R.id.commentsTextView);
         }
     }
 
@@ -91,11 +93,13 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
             holder.likesTextView.setText(likes + " Likes");
         if (image.hasLiked) {
             holder.mLikeButton.setText("Liked");
-            //holder.mLikeButton.setBackgroundColor(ContextCompat.getColor(context,R.color.colorAccent));
         } else {
             holder.mLikeButton.setText("Like");
-            // holder.mLikeButton.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimary));
         }
+        if (image.comments == 0 || image.comments == 1)
+            holder.commentsTextView.setText(image.comments + " comment");
+        else
+            holder.commentsTextView.setText(image.comments + " comments");
         holder.mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

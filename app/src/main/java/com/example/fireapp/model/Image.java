@@ -35,6 +35,9 @@ public class Image {
     public int likes = 0;
 
     @Exclude
+    public int comments = 0;
+
+    @Exclude
     public boolean hasLiked = false;
 
     @Exclude
@@ -47,6 +50,10 @@ public class Image {
 
     public void removeLike() {
         this.likes--;
+    }
+
+    public void addComments() {
+        this.comments++;
     }
 
 }

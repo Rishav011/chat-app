@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fireapp.Adapter.feedAdapter;
+import com.example.fireapp.model.Comment;
 import com.example.fireapp.model.Image;
 import com.example.fireapp.model.Like;
 import com.example.fireapp.model.Users;
@@ -138,6 +139,34 @@ public class feedFragment extends Fragment {
                             image.userLike = null;
                         }
                         mAdapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                Query commentsQuery = reference.child("Comments").orderByChild("postid").equalTo(image.key);
+                commentsQuery.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        image.addComments();
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
                     }
 

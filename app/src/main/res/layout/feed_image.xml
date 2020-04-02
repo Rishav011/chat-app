@@ -89,6 +89,18 @@
         android:text="no of likes"
         android:textSize="15sp"></TextView>
 
+    <TextView
+        android:id="@+id/commentsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/likeButton"
+        android:layout_toRightOf="@+id/likesTextView"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="serif"
+        android:text="no of comments"
+        android:textSize="15sp"></TextView>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
