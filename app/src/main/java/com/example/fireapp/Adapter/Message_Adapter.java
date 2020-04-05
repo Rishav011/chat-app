@@ -1,6 +1,8 @@
 package com.example.fireapp.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fireapp.R;
 import com.example.fireapp.model.message;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -27,8 +32,6 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
     FirebaseUser fUser;
 
     public Message_Adapter(Context context, List<message> messages) {
-
-
         this.messages = messages;
         this.context = context;
     }
@@ -47,7 +50,7 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull Message_Adapter.ViewHolder holder, final int position) {
-        message chat = messages.get(position);
+        final message chat = messages.get(position);
         SimpleDateFormat formatTime = new SimpleDateFormat("hh:mm a");
         SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
         long time = chat.getTime();
@@ -67,6 +70,34 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
         }
         holder.timeText.setText(newTime);
         holder.show_message.setText(chat.getMessage());
+        holder.show_message.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(context);
+                builder.setMessage("Do you want to delete this chat?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //delete chat code
+                                Task<Void> reference = FirebaseDatabase.getInstance().getReference("Chats")
+                                        .child(chat.key).removeValue();
+                                notifyItemRemoved(position);
+                            }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.setTitle("Delete chat");
+                alert.show();
+
+                return false;
+            }
+        });
     }
 
 

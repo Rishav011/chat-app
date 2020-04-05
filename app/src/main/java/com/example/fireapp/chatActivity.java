@@ -115,7 +115,9 @@ public class chatActivity extends AppCompatActivity {
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("time", time);
-        reference.child("Chats").push().setValue(hashMap);
+        String key2 = reference.child("Chats").push().getKey();
+        hashMap.put("key", key2);
+        reference.child("Chats").child(key2).setValue(hashMap);
         final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
                 .child(receiver)
                 .child(fuser.getUid());
