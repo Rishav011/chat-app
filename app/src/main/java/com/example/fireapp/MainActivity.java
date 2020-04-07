@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,6 +34,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText emailEditText;
@@ -45,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 1;
     private String TAG = "Info";
     private ProgressBar progressBar;
-    int flag = 0;
     DatabaseReference reference;
 
     //firebase
@@ -66,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
         mAuthListner = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null && flag != 1) {
-                  Intent intent =new Intent(MainActivity.this, Main2Activity.class);
-                  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                  startActivity(intent);
+                if (firebaseAuth.getCurrentUser() != null) {
+                    Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
                     finish();
                 }
 
@@ -99,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flag = 1;
                 signIn();
             }
         });
@@ -169,15 +171,17 @@ public class MainActivity extends AppCompatActivity {
                             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
-                                        Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
-                                        finish();
-
-                                    } else {
-                                        startActivity(new Intent(MainActivity.this, DetailsActivity.class));
-                                        Toast.makeText(MainActivity.this, "Google Sign in Successful", Toast.LENGTH_SHORT).show();
-                                        finish();
+                                    if(!dataSnapshot.exists()) {
+                                        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                                        if (acct != null) {
+                                            String username = acct.getDisplayName();
+                                            Uri personPhoto = acct.getPhotoUrl();
+                                            HashMap<String, Object> hashMap = new HashMap<>();
+                                            hashMap.put("username", username);
+                                            hashMap.put("id", userId);
+                                            hashMap.put("ImageUrl", personPhoto.toString());
+                                            reference.setValue(hashMap);
+                                        }
                                     }
                                 }
 
@@ -186,11 +190,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                             });
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-
                         }
                     }
                 });

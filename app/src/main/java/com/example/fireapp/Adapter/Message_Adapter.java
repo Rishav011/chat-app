@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,6 +85,7 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
                                 Task<Void> reference = FirebaseDatabase.getInstance().getReference("Chats")
                                         .child(chat.key).removeValue();
                                 notifyItemRemoved(position);
+                                Toast.makeText(context, "Chat deleted sccessfully!", Toast.LENGTH_SHORT).show();
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override

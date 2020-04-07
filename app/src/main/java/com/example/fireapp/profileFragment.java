@@ -1,5 +1,6 @@
 package com.example.fireapp;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +44,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class profileFragment extends Fragment {
-     FirebaseUser firebaseUser;
+    FirebaseUser firebaseUser;
     DatabaseReference reference;
     ImageView profileImage;
     TextView textView;
@@ -56,12 +57,13 @@ public class profileFragment extends Fragment {
     private int PICK_IMAGE_REQUEST = 7;
     StorageReference storageReference;
     String imgData;
-    HashMap<String,Object> hashMap;
+    HashMap<String, Object> hashMap;
     UploadTask uploadTask;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_profile,container,false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
         hashMap = new HashMap<>();
         initialise();
         setUserDetails();
@@ -77,7 +79,6 @@ public class profileFragment extends Fragment {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String username = usernameEditText.getText().toString();
                 if (username.trim().isEmpty()) {
                     Toast.makeText(getContext(), "Username can't be empty!", Toast.LENGTH_SHORT).show();
@@ -89,10 +90,8 @@ public class profileFragment extends Fragment {
                             HashMap<String, Object> map = new HashMap<>();
                             map.put("username", uname);
                             reference.updateChildren(map);
-                              Toast.makeText(getContext(), "Username updated successfully!", Toast.LENGTH_SHORT).show();
-                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getContext().INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                         }
 
                         @Override
@@ -100,15 +99,15 @@ public class profileFragment extends Fragment {
 
                         }
                     });
+                    Toast.makeText(getActivity(), "Username updated successfully!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         return view;
     }
 
     //initialization
-    private void initialise(){
+    private void initialise() {
         profileImage = view.findViewById(R.id.profileImage);
         textView = view.findViewById(R.id.textView);
         usernameEditText = view.findViewById(R.id.usernameEditText);
@@ -122,14 +121,14 @@ public class profileFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users user= dataSnapshot.getValue(Users.class);
+                Users user = dataSnapshot.getValue(Users.class);
                 try {
                     textView.setText("Welcome, " + user.getUsername());
                     Glide.with(getContext()).load(user.getImageUrl()).into(profileImage);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -138,7 +137,7 @@ public class profileFragment extends Fragment {
     }
 
 
-    private void uploadImage(){
+    private void uploadImage() {
         if (uri != null) {
             //this is for image file name
             storageReference = FirebaseStorage.getInstance().getReference().child("Image_File");
@@ -147,7 +146,7 @@ public class profileFragment extends Fragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 25, baos);
             byte[] data = baos.toByteArray();
-            uploadTask=filepath.putBytes(data);
+            uploadTask = filepath.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -156,8 +155,8 @@ public class profileFragment extends Fragment {
                         public void onSuccess(Uri uri) {
                             imgData = uri.toString();
                             hashMap.put("ImageUrl", imgData);
-                          reference.updateChildren(hashMap);
-                            Toast.makeText(getContext(), "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
+                            reference.updateChildren(hashMap);
+                            Toast.makeText(getActivity(), "Profile picture updated successfully", Toast.LENGTH_SHORT).show();
                             //Toast.makeText(accountActivity.this, "success!", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -165,7 +164,7 @@ public class profileFragment extends Fragment {
             });
 
         } else {
-            Toast.makeText(getContext(), "No image selected!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No image selected!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -176,6 +175,7 @@ public class profileFragment extends Fragment {
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -183,14 +183,14 @@ public class profileFragment extends Fragment {
 
             uri = data.getData();
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
             } catch (Exception e) {
             }
 
         }
-        if(uploadTask!=null && uploadTask.isInProgress()){
-            Toast.makeText(getContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
-        }else{
+        if (uploadTask != null && uploadTask.isInProgress()) {
+            Toast.makeText(getActivity(), "Upload in progress", Toast.LENGTH_SHORT).show();
+        } else {
             uploadImage();
 
         }
