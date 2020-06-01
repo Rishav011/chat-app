@@ -39,7 +39,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
         <service
-            android:name="Notification.MyFirebaseMessaging"
+            android:name=".Notification.MyFirebaseMessaging"
             android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

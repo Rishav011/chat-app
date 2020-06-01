@@ -31,9 +31,7 @@ import com.google.firebase.iid.InstanceIdResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import Notification.Token;
-
-import static com.firebase.ui.auth.AuthUI.TAG;
+import com.example.fireapp.Notification.Token;
 
 
 public class tab1 extends Fragment {

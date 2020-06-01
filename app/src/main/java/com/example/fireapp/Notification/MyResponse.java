@@ -1,4 +1,4 @@
-package Notification;
+package com.example.fireapp.Notification;
 
 public class MyResponse {
 

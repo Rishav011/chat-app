@@ -3,22 +3,18 @@ package com.example.fireapp.Adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.fireapp.R;
 import com.example.fireapp.model.message;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
@@ -71,35 +67,37 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
         }
         holder.timeText.setText(newTime);
         holder.show_message.setText(chat.getMessage());
-        holder.show_message.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(context);
-                builder.setMessage("Do you want to delete this chat?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //delete chat code
-                                Task<Void> reference = FirebaseDatabase.getInstance().getReference("Chats")
-                                        .child(chat.key).removeValue();
-                                notifyItemRemoved(position);
-                                Toast.makeText(context, "Chat deleted sccessfully!", Toast.LENGTH_SHORT).show();
-                            }
-                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.setTitle("Delete chat");
-                alert.show();
+        if (getItemViewType(position) == MSG_TYPE_RIGHT) {
+            holder.show_message.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Do you want to delete this chat?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //delete chat code
+                                    Task<Void> reference = FirebaseDatabase.getInstance().getReference("Chats")
+                                            .child(chat.key).removeValue();
+                                    notifyItemRemoved(position);
+                                    Toast.makeText(context, "Chat deleted sccessfully!", Toast.LENGTH_SHORT).show();
+                                }
+                            }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.setTitle("Delete chat");
+                    alert.show();
 
-                return false;
-            }
-        });
+                    return false;
+                }
+            });
+        }
     }
 
 

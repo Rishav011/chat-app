@@ -1,4 +1,4 @@
-package Notification;
+package com.example.fireapp.Notification;
 
 import android.annotation.TargetApi;
 import android.app.NotificationChannel;

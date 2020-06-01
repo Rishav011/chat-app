@@ -1,4 +1,4 @@
-package Notification;
+package com.example.fireapp.Notification;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

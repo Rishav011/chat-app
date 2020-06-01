@@ -1,4 +1,4 @@
-package Notification;
+package com.example.fireapp.Notification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -74,8 +74,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         String icon = String.valueOf(Icon);
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-
-        RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, chatActivity.class);
         Bundle bundle = new Bundle();
@@ -125,7 +123,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         if (j > 0) {
             i = j;
         }
-
         notif.notify(i, builder.build());
     }
 }

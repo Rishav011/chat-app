@@ -1,4 +1,4 @@
-package Notification;
+package com.example.fireapp.Notification;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

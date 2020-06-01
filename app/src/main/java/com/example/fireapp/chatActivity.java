@@ -31,12 +31,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import Notification.APIService;
-import Notification.Client;
-import Notification.Data;
-import Notification.MyResponse;
-import Notification.Sender;
-import Notification.Token;
+import com.example.fireapp.Notification.APIService;
+import com.example.fireapp.Notification.Client;
+import com.example.fireapp.Notification.Data;
+import com.example.fireapp.Notification.MyResponse;
+import com.example.fireapp.Notification.Sender;
+import com.example.fireapp.Notification.Token;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -228,8 +228,9 @@ public class chatActivity extends AppCompatActivity {
                         messages.add(chat);
                     }
                     message_adapter = new Message_Adapter(chatActivity.this, messages);
-                    recyclerView.setAdapter(message_adapter);
-                    recyclerView.scrollToPosition(messages.size() - 1);
+                        recyclerView.setAdapter(message_adapter);
+                        recyclerView.scrollToPosition(messages.size() - 1);
+
                 }
             }
 
