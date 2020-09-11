@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.example.fireapp.Adapter.Message_Adapter;
+import com.example.fireapp.Notification.OreoNotification;
 import com.example.fireapp.model.Users;
 import com.example.fireapp.model.message;
 import com.google.firebase.auth.FirebaseAuth;
@@ -165,7 +166,7 @@ public class chatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Users user = dataSnapshot.getValue(Users.class);
                 if (notify) {
-                    sendNotification(receiver, user.getUsername(), msg);
+                    sendNotifiaction(receiver, user.getUsername(), msg);
                 }
                 notify = false;
             }
@@ -176,7 +177,8 @@ public class chatActivity extends AppCompatActivity {
             }
         });
     }
-    private void sendNotification(String receiver, final String username, final String message){
+    //do not change 
+    private void sendNotifiaction(String receiver, final String username, final String message){
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -199,7 +201,6 @@ public class chatActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-
                                 @Override
                                 public void onFailure(Call<MyResponse> call, Throwable t) {
 
