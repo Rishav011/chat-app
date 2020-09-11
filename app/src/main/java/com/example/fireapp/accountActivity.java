@@ -142,7 +142,9 @@ public class accountActivity extends AppCompatActivity {
             uri = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            }catch (Exception e){}
+            }catch (Exception e){
+                Log.i("Error:","Some error encountered please try again");
+            }
 
         }
     }

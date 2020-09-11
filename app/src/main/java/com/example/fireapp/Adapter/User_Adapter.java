@@ -91,7 +91,7 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
 
     //check for last message
     private void lastMessage(final String userid, final TextView last_msg) {
-        theLastMessage = ".fkBNDFk.ndv.z.vurg;n>F";
+        theLastMessage = "XUy11PDbDcpwEE6H0Prv";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
         reference.addValueEventListener(new ValueEventListener() {
@@ -108,14 +108,14 @@ public class User_Adapter extends RecyclerView.Adapter<User_Adapter.ViewHolder> 
                     }
                 }
                 switch (theLastMessage) {
-                    case ".fkBNDFk.ndv.z.vurg;n>F":
+                    case "XUy11PDbDcpwEE6H0Prv":
                         last_msg.setText("");
                         break;
 
                     default:
                         last_msg.setText(theLastMessage);
                 }
-                theLastMessage = ".fkBNDFk.ndv.z.vurg;n>F";
+                theLastMessage = "XUy11PDbDcpwEE6H0Prv";
             }
 
             @Override

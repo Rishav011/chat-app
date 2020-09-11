@@ -106,7 +106,6 @@ public class tab1 extends Fragment {
                     Users user = snapshot.getValue(Users.class);
                     for (Chatlist chatlist : usersList) {
                         if (user.getId().equals(chatlist.getId())) {
-
                             mUsers.add(user);
                         }
                     }

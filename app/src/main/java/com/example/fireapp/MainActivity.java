@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button loginButton;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListner;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private Button signInButton;
     private SignInButton googleButton;
     private GoogleSignInClient mGoogleSignInClient;
@@ -66,19 +66,17 @@ public class MainActivity extends AppCompatActivity {
         googleButton = findViewById(R.id.googleButton);
         progressBar = findViewById(R.id.progressBar);
         mAuth = FirebaseAuth.getInstance();
-        mAuthListner = new FirebaseAuth.AuthStateListener() {
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
                     Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                     finish();
                 }
 
             }
         };
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 login();
             }
         });
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        signInButton.setOnClickListener(new View.OnClickListener() {  //new account
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.GONE);
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListner);
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
     private void login() {

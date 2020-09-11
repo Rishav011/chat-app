@@ -86,6 +86,7 @@ public class chatActivity extends AppCompatActivity {
                finish();
            }
        });
+       //Notification
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
        //send message
         reference = FirebaseDatabase.getInstance().getReference("User").child(key);
@@ -103,7 +104,7 @@ public class chatActivity extends AppCompatActivity {
                 messageText.setText("");
             }
         });
-
+        //set user information
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -139,6 +140,7 @@ public class chatActivity extends AppCompatActivity {
                 .child(receiver)
                 .child(fuser.getUid());
         chatRefReceiver.child("id").setValue(fuser.getUid());
+        //key==receiver
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
                 .child(fuser.getUid())
                 .child(key);
@@ -156,14 +158,14 @@ public class chatActivity extends AppCompatActivity {
             }
         });
         final String msg = message;
-
+    //notification
         reference = FirebaseDatabase.getInstance().getReference("User").child(fuser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Users user = dataSnapshot.getValue(Users.class);
                 if (notify) {
-                    sendNotifiaction(receiver, user.getUsername(), msg);
+                    sendNotification(receiver, user.getUsername(), msg);
                 }
                 notify = false;
             }
@@ -174,7 +176,7 @@ public class chatActivity extends AppCompatActivity {
             }
         });
     }
-    private void sendNotifiaction(String receiver, final String username, final String message){
+    private void sendNotification(String receiver, final String username, final String message){
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -222,7 +224,6 @@ public class chatActivity extends AppCompatActivity {
                 messages.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     message chat = snapshot.getValue(message.class);
-
                     if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
                             chat.getReceiver().equals(userid) && chat.getSender().equals(myid)) {
                         messages.add(chat);

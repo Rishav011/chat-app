@@ -9,9 +9,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        android:layout_marginTop="329dp"
-        android:layout_marginEnd="131dp"
-        android:text="Tab2"
+        android:layout_marginTop="244dp"
+        android:layout_marginEnd="128dp"
+        android:text="Work in progress..."
+        android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:textSize="30sp" />
 </RelativeLayout>

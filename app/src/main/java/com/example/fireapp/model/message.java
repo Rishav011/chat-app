@@ -46,8 +46,8 @@ public class message {
         return receiver;
     }
 
-    public void setReciever(String reciever) {
-        this.receiver = reciever;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
     public String getMessage() {

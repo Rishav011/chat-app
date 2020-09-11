@@ -74,7 +74,7 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(context);
                     builder.setMessage("Do you want to delete this chat?")
-                            .setCancelable(false)
+                            .setCancelable(true)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -82,7 +82,7 @@ public class Message_Adapter extends RecyclerView.Adapter<Message_Adapter.ViewHo
                                     Task<Void> reference = FirebaseDatabase.getInstance().getReference("Chats")
                                             .child(chat.key).removeValue();
                                     notifyItemRemoved(position);
-                                    Toast.makeText(context, "Chat deleted sccessfully!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Chat deleted successfully!", Toast.LENGTH_SHORT).show();
                                 }
                             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override

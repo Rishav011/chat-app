@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.fireapp.ui.main.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
-
+//used for tab1,tab2,tab3
 public class chatFragment extends Fragment {
     public static TabLayout tabLayout;
     public static ViewPager viewPager;

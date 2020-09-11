@@ -62,10 +62,10 @@
             android:layout_height="40dp"
             android:id="@+id/text_send"
             android:background="@android:color/transparent"
-            android:hint="Write a comment..."
+            android:hint="Write a message..."
             android:layout_toLeftOf="@id/btn_send"
             android:layout_centerVertical="true"
-            android:inputType="textCapWords"
+            android:inputType="textCapSentences"
             />
 
         <ImageButton
