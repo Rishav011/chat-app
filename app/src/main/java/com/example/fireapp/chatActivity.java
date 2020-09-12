@@ -177,7 +177,7 @@ public class chatActivity extends AppCompatActivity {
             }
         });
     }
-    //do not change 
+    //do not change
     private void sendNotifiaction(String receiver, final String username, final String message){
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
