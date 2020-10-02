@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        check for the auth status
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -131,10 +132,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signIn() {
+//        move to signin intent
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+//    create the tokens and check it
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -60,6 +60,8 @@ public class CommentsActivity extends AppCompatActivity {
         recyclerView.setAdapter(commentAdapter);
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Query commentsQuery = databaseReference.child("Comments").orderByChild("postid").equalTo(postid);
+
+//        get comments from online database
         commentsQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -117,6 +119,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
+//    create a new comment
     private void PostComment(String id,String comment,String postid) {
         reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap= new HashMap<>();

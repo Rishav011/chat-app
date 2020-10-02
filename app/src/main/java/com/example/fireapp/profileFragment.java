@@ -67,6 +67,7 @@ public class profileFragment extends Fragment {
         hashMap = new HashMap<>();
         initialise();
         setUserDetails();
+//        button for changing profile photo
         updateImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +77,7 @@ public class profileFragment extends Fragment {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
+//        button to change the username
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +119,7 @@ public class profileFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference("User").child(firebaseUser.getUid());
     }
 
+//    show the user details
     private void setUserDetails() {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -137,6 +140,7 @@ public class profileFragment extends Fragment {
     }
 
 
+//    function to upload image to firebase
     private void uploadImage() {
         if (uri != null) {
             //this is for image file name
