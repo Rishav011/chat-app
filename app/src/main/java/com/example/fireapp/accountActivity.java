@@ -121,6 +121,7 @@ public class accountActivity extends AppCompatActivity {
                         }
 
                         startActivity(new Intent(accountActivity.this, Main2Activity.class));
+                        finish();
                     } else {
                         progressBar.setVisibility(View.INVISIBLE);
                         Toast.makeText(accountActivity.this, "Sign in failed", Toast.LENGTH_SHORT).show();

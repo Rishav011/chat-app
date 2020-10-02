@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progressBar.setVisibility(View.GONE);
                 startActivity(new Intent(MainActivity.this, accountActivity.class));
-                // finish();
+                finish();
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
