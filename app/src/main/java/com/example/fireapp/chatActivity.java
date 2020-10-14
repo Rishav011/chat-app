@@ -68,7 +68,7 @@ public class chatActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        username = findViewById(R.id.username);
+         initialization();
         sendButton = findViewById(R.id.btn_send);
         messageText = findViewById(R.id.text_send);
         profileImage = findViewById(R.id.profileImage);
@@ -242,4 +242,5 @@ public class chatActivity extends AppCompatActivity {
             }
         });
     }
+    public void initialization(){username = findViewById(R.id.username);}
 }
