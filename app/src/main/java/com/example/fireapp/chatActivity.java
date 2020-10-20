@@ -112,7 +112,7 @@ public class chatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Users user = dataSnapshot.getValue(Users.class);
                 username.setText(user.getUsername());
-                if (user.getImageUrl().equals("default")) {
+                if (user.getImageUrl() == null) {
                     profileImage.setImageResource(R.mipmap.ic_launcher);
                 } else {
                     Glide.with(getApplicationContext()).load(user.getImageUrl()).into(profileImage);

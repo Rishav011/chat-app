@@ -72,7 +72,11 @@ public class feedAdapter extends RecyclerView.Adapter<feedAdapter.ViewHolder> {
         SimpleDateFormat formatTime = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
         long time = image.getTimestamp();
         try {
-            Glide.with(context).load(image.user.getImageUrl()).into(holder.profileImage);
+            if (image.user.getImageUrl() == null) {
+                holder.profileImage.setImageResource(R.mipmap.ic_launcher);
+            }else{
+                Glide.with(context).load(image.user.getImageUrl()).into(holder.profileImage);
+            }
 
         } catch (Exception e) {
 

@@ -64,7 +64,12 @@ public class commentAdapter extends RecyclerView.Adapter<commentAdapter.ViewHold
             holder.dateTextView.setText(newDate);
             holder.timeTextView.setText(newTime);
             try {
-                Glide.with(context).load(comment.user.getImageUrl()).into(holder.profileImage);
+                if(comment.user.getImageUrl() == null){
+                    holder.profileImage.setImageResource(R.mipmap.ic_launcher);
+                }
+                else{
+                    Glide.with(context).load(comment.user.getImageUrl()).into(holder.profileImage);
+                }
 
             } catch (Exception e) {
 

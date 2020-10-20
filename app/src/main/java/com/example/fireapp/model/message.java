@@ -49,7 +49,7 @@ public class message {
     public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
-
+    
     public String getMessage() {
         return message;
     }
