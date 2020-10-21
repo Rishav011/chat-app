@@ -69,8 +69,6 @@ public class chatActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
          initialization();
-      
-        messageText = findViewById(R.id.text_send);
         profileImage = findViewById(R.id.profileImage);
         intent = getIntent();
         key = intent.getStringExtra("userid");
@@ -243,5 +241,6 @@ public class chatActivity extends AppCompatActivity {
         });
     }
     public void initialization(){username = findViewById(R.id.username);
-                                sendButton = findViewById(R.id.btn_send);}
+                                sendButton = findViewById(R.id.btn_send);
+                                 messageText = findViewById(R.id.text_send);}
 }
